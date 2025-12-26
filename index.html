@@ -23,7 +23,7 @@
     <script>
         // Pega o valor da URL (ex: ?valor=10.00)
         const urlParams = new URLSearchParams(window.location.search);
-        const valorOriginal = urlParams.get('valor') || "00.00";
+        const valorOriginal = urlParams.get('valor') || "10.00";
         document.getElementById('valor-txt').innerText = "R$ " + valorOriginal;
 
         function irParaPagamento() {
