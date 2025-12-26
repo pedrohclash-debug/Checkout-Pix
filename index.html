@@ -5,17 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checkout eXPay</title>
     <style>
-        body { font-family: Arial; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background: #eee; }
-        .box { background: white; padding: 40px; border-radius: 20px; text-align: center; box-shadow: 0 10px 20px rgba(0,0,0,0.1); width: 300px; }
-        .btn { background: #00c853; color: white; padding: 15px; border: none; border-radius: 10px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 20px; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background: #f0f2f5; }
+        .box { background: white; padding: 40px; border-radius: 20px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 320px; }
+        .btn { background: #00c853; color: white; padding: 16px; border: none; border-radius: 12px; cursor: pointer; width: 100%; font-weight: bold; font-size: 16px; margin-top: 20px; transition: 0.3s; }
+        .btn:hover { background: #00a444; }
+        #qrcode img { margin-top: 20px; max-width: 200px; }
+        #pix-copia { word-break: break-all; font-size: 12px; background: #eee; padding: 10px; margin-top: 10px; border-radius: 5px; display: none; }
     </style>
 </head>
 <body>
     <div class="box">
         <h2 id="valor-txt">R$ 0,00</h2>
-        <p>Pagamento via Pix</p>
-        <button class="btn" onclick="pagar()">PAGAR AGORA</button>
+        <p>Pagamento via Pix Instantâneo</p>
+        <button id="btn-pagar" class="btn" onclick="gerarPagamento()">PAGAR AGORA</button>
         <div id="status"></div>
+        <div id="qrcode"></div>
+        <div id="pix-copia"></div>
     </div>
 
     <script>
@@ -23,9 +28,19 @@
         const valor = urlParams.get('valor') || "10.00";
         document.getElementById('valor-txt').innerText = "R$ " + valor;
 
-        function pagar() {
-            document.getElementById('status').innerText = "Gerando Pix de R$ " + valor + "...";
-            // AQUI CONECTAREMOS SUA API EXPAY NO PRÓXIMO PASSO
+        async function gerarPagamento() {
+            const btn = document.getElementById('btn-pagar');
+            const status = document.getElementById('status');
+            
+            btn.disabled = true;
+            status.innerText = "Gerando QR Code...";
+
+            // OBS: Para segurança total, a chamada de API deve ser feita via Backend (Vercel Functions)
+            // Mas para este modelo inicial, você pode usar um redirecionamento ou webhook.
+            alert("Redirecionando para o ambiente seguro da eXPay...");
+            
+            // Aqui você deve inserir a URL de checkout que a eXPay te fornece no painel
+            window.location.href = `https://expay.com.br/checkout/SEU_USER_ID?valor=${valor}`;
         }
     </script>
 </body>
