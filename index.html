@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout eXPay</title>
+    <style>
+        body { font-family: Arial; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background: #eee; }
+        .box { background: white; padding: 40px; border-radius: 20px; text-align: center; box-shadow: 0 10px 20px rgba(0,0,0,0.1); width: 300px; }
+        .btn { background: #00c853; color: white; padding: 15px; border: none; border-radius: 10px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h2 id="valor-txt">R$ 0,00</h2>
+        <p>Pagamento via Pix</p>
+        <button class="btn" onclick="pagar()">PAGAR AGORA</button>
+        <div id="status"></div>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const valor = urlParams.get('valor') || "10.00";
+        document.getElementById('valor-txt').innerText = "R$ " + valor;
+
+        function pagar() {
+            document.getElementById('status').innerText = "Gerando Pix de R$ " + valor + "...";
+            // AQUI CONECTAREMOS SUA API EXPAY NO PRÓXIMO PASSO
+        }
+    </script>
+</body>
+</html>
