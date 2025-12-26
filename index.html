@@ -3,44 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Checkout eXPay</title>
+    <title>Checkout Seguro - eXPay</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background: #f0f2f5; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background: #f0f2f5; }
         .box { background: white; padding: 40px; border-radius: 20px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 320px; }
         .btn { background: #00c853; color: white; padding: 16px; border: none; border-radius: 12px; cursor: pointer; width: 100%; font-weight: bold; font-size: 16px; margin-top: 20px; transition: 0.3s; }
         .btn:hover { background: #00a444; }
-        #qrcode img { margin-top: 20px; max-width: 200px; }
-        #pix-copia { word-break: break-all; font-size: 12px; background: #eee; padding: 10px; margin-top: 10px; border-radius: 5px; display: none; }
+        h2 { color: #333; margin-bottom: 5px; }
+        p { color: #666; font-size: 14px; }
     </style>
 </head>
 <body>
     <div class="box">
         <h2 id="valor-txt">R$ 0,00</h2>
         <p>Pagamento via Pix Instantâneo</p>
-        <button id="btn-pagar" class="btn" onclick="gerarPagamento()">PAGAR AGORA</button>
-        <div id="status"></div>
-        <div id="qrcode"></div>
-        <div id="pix-copia"></div>
+        <button class="btn" onclick="irParaPagamento()">PAGAR AGORA</button>
     </div>
 
     <script>
+        // Pega o valor da URL (ex: ?valor=10.00)
         const urlParams = new URLSearchParams(window.location.search);
-        const valor = urlParams.get('valor') || "10.00";
-        document.getElementById('valor-txt').innerText = "R$ " + valor;
+        const valorOriginal = urlParams.get('valor') || "00.00";
+        document.getElementById('valor-txt').innerText = "R$ " + valorOriginal;
 
-        async function gerarPagamento() {
-            const btn = document.getElementById('btn-pagar');
-            const status = document.getElementById('status');
-            
-            btn.disabled = true;
-            status.innerText = "Gerando QR Code...";
+        function irParaPagamento() {
+            // Seus dados da eXPay extraídos da imagem
+            const merchantID = "943";
+            const merchantKey = "$2y$12$XMcSpEwdbeOKglK4Zf5TPeKRjXxlO9ueJTi0jR7vl8UUo7U1Ylbk2";
+            const requestURL = "https://expaybrasil.com/en/purchase/link";
 
-            // OBS: Para segurança total, a chamada de API deve ser feita via Backend (Vercel Functions)
-            // Mas para este modelo inicial, você pode usar um redirecionamento ou webhook.
-            alert("Redirecionando para o ambiente seguro da eXPay...");
-            
-            // Aqui você deve inserir a URL de checkout que a eXPay te fornece no painel
-            window.location.href = `https://expay.com.br/checkout/SEU_USER_ID?valor=${valor}`;
+            // Criando o formulário para enviar os dados
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = requestURL;
+
+            const fields = {
+                'merchant_id': merchantID,
+                'merchant_key': merchantKey,
+                'amount': valorOriginal,
+                'currency': 'BRL',
+                'order_id': 'ORD-' + Math.floor(Math.random() * 1000000) // Gera um ID de pedido aleatório
+            };
+
+            for (const key in fields) {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = key;
+                input.value = fields[key];
+                form.appendChild(input);
+            }
+
+            document.body.appendChild(form);
+            form.submit();
         }
     </script>
 </body>
